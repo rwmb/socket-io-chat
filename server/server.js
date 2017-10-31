@@ -21,12 +21,8 @@ io.on('connection', (socket) => {
   
   socket.on('createMessage', (newMessage) => {
     console.log(`${newMessage.from}: ${newMessage.text}`);
-    let newMessageObj = {
-      from: newMessage.from,
-      text: newMessage.text,
-      createdAt: new Date().getTime()
-    };
-    // socket.emit('newMessage', newMessageObj);
+    newMessage.createdAt = new Date().getTime();
+    io.emit('newMessage', newMessage);
   });
   
   socket.on('disconnect', () => {
