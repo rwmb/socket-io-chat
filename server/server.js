@@ -18,11 +18,17 @@ io.on('connection', (socket) => {
     text: 'You are connected!',
     createdAt: new Date().getTime()
   });
+  socket.broadcast.emit('newMessage', {
+    from: 'SERVER',
+    text: 'New user connected to the server!',
+    createdAt: new Date().getTime()
+  });
   
   socket.on('createMessage', (newMessage) => {
     console.log(`${newMessage.from}: ${newMessage.text}`);
     newMessage.createdAt = new Date().getTime();
-    io.emit('newMessage', newMessage);
+    //socket.broadcast.emit('newMessage', newMessage); // send to everyone but who sent the message
+    io.emit('newMessage', newMessage); // send to everyone
   });
   
   socket.on('disconnect', () => {
