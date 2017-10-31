@@ -3,6 +3,8 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
+const {generateMessage} = require('./utils/message');
+
 const PORT = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
@@ -13,22 +15,14 @@ app.use(express.static(path.join(__dirname, '../public')));
 io.on('connection', (socket) => {
   console.log('New user connected\n');
   
-  socket.emit('newMessage', {
-    from: 'SERVER',
-    text: 'You are connected!',
-    createdAt: new Date().getTime()
-  });
-  socket.broadcast.emit('newMessage', {
-    from: 'SERVER',
-    text: 'New user connected to the server!',
-    createdAt: new Date().getTime()
-  });
+  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app!'));
+  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined.'));
   
   socket.on('createMessage', (newMessage) => {
-    console.log(`${newMessage.from}: ${newMessage.text}`);
-    newMessage.createdAt = new Date().getTime();
+    console.log(`${newMessage.from}: ${newMessage.text}`); // log message
+    
     //socket.broadcast.emit('newMessage', newMessage); // send to everyone but who sent the message
-    io.emit('newMessage', newMessage); // send to everyone
+    io.emit('newMessage', generateMessage(newMessage.from, newMessage.text)); // send to everyone
   });
   
   socket.on('disconnect', () => {
