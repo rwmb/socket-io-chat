@@ -24,7 +24,7 @@ io.on('connection', (socket) => {
     
     //socket.broadcast.emit('newMessage', newMessage); // send to everyone but who sent the message
     io.emit('newMessage', generateMessage(newMessage.from, newMessage.text)); // send to everyone
-    callback('This is from the server.');
+    callback();
   });
   
   socket.on('createLocationMessage', (coords) => {
