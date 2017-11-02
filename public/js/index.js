@@ -1,14 +1,5 @@
 
 var socket = io();
-var format = function (message) {
-  let date = new Date(message.createdAt);
-  dateString = date.getDate() + 
-    '/' + date.getMonth() + 
-    '/' + date.getFullYear() +
-    ' ' + date.getHours() +
-    ':' + date.getMinutes();
-  return `${dateString} - ${message.from}: ${message.text}`;
-};
 
 socket.on('connect', function () {
   console.log('Connected to server');
@@ -19,16 +10,18 @@ socket.on('disconnect', function () {
 });
 
 socket.on('newMessage', function (message) {
+  var formattedTime = moment(message.createdAt).format('h:mm a');
   var li = $('<li></li>');
-  li.text(format(message));
+  li.text(`${message.from} ${formattedTime}: ${message.text}`);
   
   $('#messages').append(li);
 });
 
 socket.on('newLocationMessage', function (message) {
+  var formattedTime = moment(message.createdAt).format('h:mm a');
   var li = jQuery('<li></li>');
   var a = jQuery('<a target="_blank">My current location</a>');
-  li.text(`${message.from}: `);
+  li.text(`${message.from} ${formattedTime}: `);
   a.attr('href', message.url);
   li.append(a);
   jQuery('#messages').append(li);
