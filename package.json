@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server/server.js",
     "test": "mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec \"npm test\"",
     "dev": "nodemon --exec \"npm test && npm start\"",
     "deploy": "npm test && git push heroku master"
   },
