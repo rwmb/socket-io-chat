@@ -10,6 +10,11 @@ button:hover {
     list-style-type: none
 }
 
+ul,
+ol {
+    list-style: none;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -21,7 +26,7 @@ button:hover {
 
 li,
 ul {
-    list-style-position: inside
+    list-style-position: inside;
 }
 
 h3 {

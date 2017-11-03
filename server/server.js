@@ -38,11 +38,11 @@ io.on('connection', (socket) => {
     callback();
   });
 
-  socket.on('createMessage', (newMessage, callback) => {
-    console.log(`${newMessage.from}: ${newMessage.text}`); // log message
-
-    //socket.broadcast.emit('newMessage', newMessage); // send to everyone but who sent the message
-    io.emit('newMessage', generateMessage(newMessage.from, newMessage.text)); // send to everyone
+  socket.on('createMessage', (message, callback) => {
+    const user = users.getUser(socket.id);
+    if (user && isRealString(message.text)) {
+      io.to(user.room).emit('newMessage', generateMessage(user.name, message.text)); // send to everyone
+    }
     callback();
   });
 
